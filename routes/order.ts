@@ -140,6 +140,7 @@ export function placeOrder () {
               const wallet = await WalletModel.findOne({ where: { UserId: req.body.UserId } })
               if ((wallet != null) && wallet.balance >= totalPrice) {
                 // random commit
+                // anothter test
                 WalletModel.decrement({ balance: totalPrice }, { where: { UserId: req.body.UserId } }).catch((error: unknown) => {
                   next(error)
                 })
