@@ -1,0 +1,33 @@
+name: "Security Analysis"
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+  pull_request:
+    branches:
+      - master
+      - develop
+jobs:
+  sonarqube:
+    name: SonarQube Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for better analysis
+
+      - name: Verify sonar-project.properties
+        run: |
+          echo "Checking sonar-project.properties..."
+          cat sonar-project.properties
+          echo "---"
+          echo "Verifying SONAR_TOKEN is set: ${{ secrets.SONAR_TOKEN != '' }}"
+
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v6.0.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_SCANNER_OPTS: "-Dsonar.verbose=true"
